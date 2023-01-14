@@ -38,22 +38,13 @@ const MORSE_TABLE = {
 };
 
 function decode(expr) {
-  let decoded = '';
-  for (let i = 0, j = 10; j <= expr.length; i += 10, j += 10) {
-    let encoded = expr.slice(i, j)
+  return expr.match(/.{10}/g)
+    .map(digits => digits
       .replace(/^0+/, "")
       .replace(/1{2}/g, '-')
-      .replace(/10/g, '.')
-      .replace(/\*{10}/g, ' ');
-
-    for (let [key, value] of Object.entries(MORSE_TABLE)) {
-      if (key === encoded) {
-        encoded = value;
-      }
-    }
-    decoded += encoded;
-  }
-  return decoded;
+      .replace(/10/g, '.'))
+    .map(symbol => MORSE_TABLE[symbol] ? MORSE_TABLE[symbol] : ' ')
+    .join('');
 }
 
 module.exports = {
